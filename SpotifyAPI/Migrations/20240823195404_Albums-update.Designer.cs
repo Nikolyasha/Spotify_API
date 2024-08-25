@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SpotifyAPI.Data;
@@ -11,9 +12,11 @@ using SpotifyAPI.Data;
 namespace SpotifyAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240823195404_Albums-update")]
+    partial class Albumsupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,26 +78,9 @@ namespace SpotifyAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArtistId");
+
                     b.ToTable("Releases");
-                });
-
-            modelBuilder.Entity("SpotifyAPI.Models.Domains.ReleaseArtists", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ArtistId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ReleaseId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReleasesArtists");
                 });
 
             modelBuilder.Entity("SpotifyAPI.Models.Domains.Song", b =>
@@ -107,9 +93,6 @@ namespace SpotifyAPI.Migrations
 
                     b.Property<TimeSpan?>("Duration")
                         .HasColumnType("interval");
-
-                    b.Property<long>("Listeners")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Lyrics")
                         .HasColumnType("text");
@@ -131,32 +114,31 @@ namespace SpotifyAPI.Migrations
                     b.ToTable("Songs");
                 });
 
-            modelBuilder.Entity("SpotifyAPI.Models.Domains.SongArtists", b =>
+            modelBuilder.Entity("SpotifyAPI.Models.Domains.Release", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.HasOne("SpotifyAPI.Models.Domains.Artist", "Artist")
+                        .WithMany("Releases")
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ArtistId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SongId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SongsArtists");
+                    b.Navigation("Artist");
                 });
 
             modelBuilder.Entity("SpotifyAPI.Models.Domains.Song", b =>
                 {
-                    b.HasOne("SpotifyAPI.Models.Domains.Release", null)
+                    b.HasOne("SpotifyAPI.Models.Domains.Release", "Release")
                         .WithMany("Songs")
                         .HasForeignKey("ReleaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Release");
+                });
+
+            modelBuilder.Entity("SpotifyAPI.Models.Domains.Artist", b =>
+                {
+                    b.Navigation("Releases");
                 });
 
             modelBuilder.Entity("SpotifyAPI.Models.Domains.Release", b =>

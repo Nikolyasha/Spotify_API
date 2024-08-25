@@ -102,3 +102,4 @@ F:\files\projects\c#\SpotifyAPI\SpotifyAPI\obj\Debug\net8.0\refint\SpotifyAPI.dl
 F:\files\projects\c#\SpotifyAPI\SpotifyAPI\obj\Debug\net8.0\SpotifyAPI.pdb
 F:\files\projects\c#\SpotifyAPI\SpotifyAPI\obj\Debug\net8.0\SpotifyAPI.genruntimeconfig.cache
 F:\files\projects\c#\SpotifyAPI\SpotifyAPI\obj\Debug\net8.0\ref\SpotifyAPI.dll
+F:\files\projects\c#\SpotifyAPI\SpotifyAPI\obj\Debug\net8.0\SpotifyAPI.sourcelink.json
